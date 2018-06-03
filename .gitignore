@@ -13,3 +13,4 @@
 movie_app/.idea
 movie_app/.idea/
 movie_app/.DS_Store
+movie_app/__pycache__
