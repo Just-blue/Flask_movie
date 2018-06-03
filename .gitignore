@@ -10,3 +10,6 @@
 *.pyc
 *.html
 *.xlm
+movie_app/.idea
+movie_app/.idea/
+movie_app/.DS_Store
