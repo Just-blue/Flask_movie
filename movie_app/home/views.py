@@ -7,7 +7,7 @@ from werkzeug.utils import secure_filename
 from movie_app import db, app
 from movie_app.admin.views import change_filename
 from movie_app.home.forms import RegistForm, LoginForm, UserdetailForm, PwdForm, CommentForm
-from movie_app.models import User, Userlog, Tag, Movie, Comment, Moviecol
+from models import User, Userlog, Tag, Movie, Comment, Moviecol
 from . import home
 from flask import render_template, redirect, url_for, flash, session, request
 
@@ -23,7 +23,7 @@ def uesr_login_req(f):
     return decorated_function
 
 # 首页
-@home.route('/<int:page>/', methods=["GET"])
+@home.route('/', methods=["GET"])
 def index(page=None):
     tags = Tag.query.all()
     page_data = Movie.query
@@ -319,7 +319,8 @@ def search(page=None):
 
 @home.route('/play/<int:id>/<int:page>/', methods=["GET", "POST"])
 def play(id=None, page=None):
-    movie = Movie.query.join(
+
+    movie = db.session.query(Movie).join(
         Tag
     ).filter(
         Tag.id == Movie.tag_id,

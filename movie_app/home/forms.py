@@ -3,7 +3,7 @@
 from flask_wtf import FlaskForm
 from wtforms.fields import SubmitField, StringField, PasswordField, TextAreaField, FileField
 from wtforms.validators import DataRequired, Email, EqualTo, Regexp, ValidationError
-from movie_app.models import User
+from models import User
 
 
 class RegistForm(FlaskForm):

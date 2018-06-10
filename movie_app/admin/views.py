@@ -8,9 +8,9 @@ from werkzeug.security import generate_password_hash
 from werkzeug.utils import secure_filename
 from movie_app import db,app
 from . import admin
-from flask import Flask, render_template, redirect, url_for, flash, session, request
+from flask import render_template, redirect, url_for, flash, session, request
 from movie_app.admin.forms import LoginForm, TagForm, MovieForm, PreviewForm, PwdForm, AuthForm, RoleForm, AdminForm
-from movie_app.models import Admin, Tag, Movie, Preview, User, Oplog, Adminlog, Userlog, Auth, Role, Moviecol, Comment
+from models import Admin, Tag, Movie, Preview, User, Oplog, Adminlog, Userlog, Auth, Role, Moviecol, Comment
 
 
 # 登陆装饰器
@@ -100,7 +100,7 @@ def tag_add():
         )
         db.session.add(oplog)  # 操作日志
         db.session.commit()
-        redirect(url_for('admin.tag_add'))
+        redirect(url_for('admin.tag_list'))
     return render_template("admin/tag_add.html",form=form)
 
 
@@ -132,7 +132,7 @@ def tag_edit(id=None):
         db.session.add(tag)
         db.session.commit()
         flash("修改标签成功", "ok")
-        redirect(url_for("admin.tag_edit", id=id))
+        redirect(url_for("admin.tag_list", id=id))
     return render_template("admin/tag_edit.html", form=form, tag=tag)
 
 
@@ -186,7 +186,7 @@ def movie_add():
         db.session.add(movie)
         db.session.commit()
         flash("添加电影成功！", "ok")
-        return redirect(url_for('admin.movie_add'))
+        return redirect(url_for('admin.movie_list'))
     return render_template("admin/movie_add.html", form=form)
 
 

@@ -1,10 +1,10 @@
 # coding:utf8
-from flask import session, app
+from flask import session
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, FileField, TextAreaField, SelectField, DateField, \
     SelectMultipleField
 from wtforms.validators import DataRequired, ValidationError, EqualTo
-from movie_app.models import Admin, Tag, Role, Auth
+from models import Admin, Tag, Role, Auth
 
 tags = Tag.query.all()
 auth_all = Auth.query.all()

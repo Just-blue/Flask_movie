@@ -11,7 +11,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:Ms121008@127.0.0.1
 #如果设置成 True (默认情况)，Flask-SQLAlchemy 将会追踪对象的修改并且发送信号。
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] =True
 app.config['SECRET_KEY'] = 'pokker'
-app.config["UP_DIR"] = os.path.join(os.path.abspath(os.path.dirname(__file__)), "static/uploads/")
+app.config["UP_DIR"] = os.path.join(os.path.abspath(os.path.dirname(__file__)), "static/movie_app/static/uploads/")
 app.config["FC_DIR"] = os.path.join(os.path.abspath(os.path.dirname(__file__)), "static/uploads/users/")
 
 app.debug = True
