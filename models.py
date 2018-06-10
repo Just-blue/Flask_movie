@@ -231,22 +231,4 @@ from werkzeug.security import generate_password_hash
 
 if __name__ == "__main__":
 
-    role = Role(
-        id=1,
-        name = "超级管理员",
-        auths = ""
-    )
-    db.session.add(role)
-    db.session.commit()
-
-    adminn = Admin(
-        id=1,
-        name="pokker",
-        pwd=generate_password_hash("Fk121008"),
-        is_super=1,
-        role_id=1
-    )
-    db.session.add(adminn)
-    db.session.commit()
-#
-# db.create_all()
+    db.create_all()
