@@ -195,9 +195,7 @@ def movie_add():
 def movie_list(page=None):
     if page is None:
         page = 1
-    page_data = Movie.query.join(Tag).filter(
-        Tag.id == Movie.tag_id
-    ).order_by(
+    page_data = Movie.query.order_by(
         Movie.addtime.desc()
     ).paginate(page=page, per_page=10)
     return render_template("admin/movie_list.html", page_data=page_data)
