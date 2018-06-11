@@ -100,7 +100,7 @@ def tag_add():
         )
         db.session.add(oplog)  # 操作日志
         db.session.commit()
-        redirect(url_for('admin.tag_list'))
+        redirect(url_for('admin.tag_add'))
     return render_template("admin/tag_add.html",form=form)
 
 
@@ -134,7 +134,6 @@ def tag_edit(id=None):
         flash("修改标签成功", "ok")
         redirect(url_for("admin.tag_list", id=id))
     return render_template("admin/tag_edit.html", form=form, tag=tag)
-
 
 
 # 标签删除
@@ -186,7 +185,7 @@ def movie_add():
         db.session.add(movie)
         db.session.commit()
         flash("添加电影成功！", "ok")
-        return redirect(url_for('admin.movie_list'))
+        return redirect(url_for('admin.movie_add'))
     return render_template("admin/movie_add.html", form=form)
 
 

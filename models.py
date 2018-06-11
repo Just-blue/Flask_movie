@@ -6,10 +6,10 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
-#用于连接数据的数据库。
+# 用于连接数据的数据库。
 app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:Ms121008@127.0.0.1:3306/movie"
-#如果设置成 True (默认情况)，Flask-SQLAlchemy 将会追踪对象的修改并且发送信号。
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] =True
+# 如果设置成 True (默认情况)，Flask-SQLAlchemy 将会追踪对象的修改并且发送信号。
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 app.config['SECRET_KEY'] = 'pokker'
 app.config["UP_DIR"] = os.path.join(os.path.abspath(os.path.dirname(__file__)), "static/movie_app/static/uploads/")
 app.config["FC_DIR"] = os.path.join(os.path.abspath(os.path.dirname(__file__)), "static/uploads/users/")
@@ -19,6 +19,7 @@ db = SQLAlchemy(app)
 
 __author__ = 'pokker'
 __date__ = '2017/12/12 11:05'
+
 
 # 会员数据模型
 class User(db.Model):
@@ -230,5 +231,22 @@ class Oplog(db.Model):
 from werkzeug.security import generate_password_hash
 
 if __name__ == "__main__":
+    # role = Role(
+    #     id=1,
+    #     name="超级管理员",
+    #     auths=""
+    # )
+    # db.session.add(role)
+    # db.session.commit()
+    #
+    # adminn = Admin(
+    #     id=1,
+    #     name="pokker",
+    #     pwd=generate_password_hash("Fk121008"),
+    #     is_super=1,
+    #     role_id=1
+    # )
+    # db.session.add(adminn)
+    # db.session.commit()
 
     db.create_all()
