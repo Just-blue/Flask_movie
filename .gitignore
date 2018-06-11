@@ -13,5 +13,6 @@
 movie_app/.idea
 movie_app/.idea/
 movie_app/.DS_Store
+movie_app/admin/__pycache__
 movie_app/__pycache__
 movie_app/static/uploads
