@@ -165,6 +165,7 @@ def comments(page=None):
 @home.route("/comments_del/<int:id>")
 @uesr_login_req
 def comments_del(id=None):
+    from models import db
     comments = Comment.query.filter_by(id=id).first_or_404()
     movie = Movie.query.filter(comments.movie_id == Movie.id).first()
     movie.commentnum -= 1
@@ -235,6 +236,7 @@ def moviecol(page=None):
 @home.route("/pwd/",methods=["GET","POST"])
 @uesr_login_req
 def pwd():
+    from models import db
     form = PwdForm()
     user = User.query.get(session['user_id'])
     if form.validate_on_submit():
@@ -254,6 +256,7 @@ def pwd():
 @home.route("/user/",methods=["GET","POST"])
 @uesr_login_req
 def user():
+    from models import db
     form = UserdetailForm()
     user = User.query.filter_by(name=session['user']).first()
     form.face.validators = []
@@ -319,11 +322,8 @@ def search(page=None):
 
 @home.route('/play/<int:id>/<int:page>/', methods=["GET", "POST"])
 def play(id=None, page=None):
-
-    movie = db.session.query(Movie).join(
-        Tag
-    ).filter(
-        Tag.id == Movie.tag_id,
+    from models import db
+    movie = Movie.query.filter(
         Movie.id == id
     ).first_or_404()
     if page is None:
