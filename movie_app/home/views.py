@@ -2,6 +2,8 @@
 import uuid,json
 from functools import wraps
 import os
+
+from werkzeug.contrib.sessions import Session
 from werkzeug.security import generate_password_hash
 from werkzeug.utils import secure_filename
 from movie_app import db, app
@@ -21,6 +23,14 @@ def uesr_login_req(f):
         return f(*args,**kwargs)
 
     return decorated_function
+
+
+@app.teardown_request
+def session_clear(exception=None):
+    if exception and Session.is_active:
+        Session.rollback()
+
+
 
 # 首页
 @home.route('/', methods=["GET"])
@@ -110,7 +120,8 @@ def login():
         )
         db.session.add(userlog)
         db.session.commit()
-
+        session_clear()
+        db.Session.close()
         return redirect(url_for('home.user'))
     return render_template("home/login.html", form=form)
 
@@ -138,6 +149,8 @@ def regist():
         )
         db.session.add(user)
         db.session.commit()
+        session_clear()
+        db.Session.close()
         flash('注册成功！', 'ok')
         return redirect(url_for('home.login'))
     return render_template("home/regist.html", form=form)
@@ -173,6 +186,8 @@ def comments_del(id=None):
     db.session.commit()
     db.session.add(movie)
     db.session.commit()
+    session_clear()
+    db.Session.close()
     flash("删除评论成功！", "ok")
     return redirect(url_for('home.comments', page=1))
 
@@ -209,6 +224,8 @@ def moviecol_add():
         )
         db.session.add(moviecol)
         db.session.commit()
+        session_clear()
+        db.Session.close()
         data = dict(ok=1)
 
     return json.dumps(data)
@@ -247,6 +264,8 @@ def pwd():
         user.pwd = generate_password_hash(data['new_pwd'])
         db.session.add(user)
         db.session.commit()
+        session_clear()
+        db.Session.close()
         flash("修改密码成功", "ok")
         return redirect(url_for('home.pwd'))
     return render_template("home/pwd.html",form=form)
@@ -290,6 +309,8 @@ def user():
         user.info = data['info']
         db.session.add(user)
         db.session.commit()
+        session_clear()
+        db.Session.close()
         flash('修改成功!', 'ok')
         return redirect(url_for('home.user'))
     return render_template("home/user.html",form=form,user = user)
@@ -354,8 +375,11 @@ def play(id=None, page=None):
         movie.commentnum += 1
         db.session.add(movie)
         db.session.commit()
+
         flash('添加评论成功！', 'ok')
         return redirect(url_for("home.play", id=movie.id, page=1))
     db.session.add(movie)
     db.session.commit()
+    session_clear()
+    db.Session.close()
     return render_template("home/play.html", movie=movie, form=form,page_data=page_data)
