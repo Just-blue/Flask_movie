@@ -25,13 +25,6 @@ def uesr_login_req(f):
     return decorated_function
 
 
-@app.teardown_request
-def session_clear(exception=None):
-    if exception and Session.is_active:
-        Session.rollback()
-
-
-
 # 首页
 @home.route('/', methods=["GET"])
 def index(page=None):
@@ -96,6 +89,7 @@ def index(page=None):
         cm=cm
     )
 
+    db.session.close()
     return render_template("home/index.html", p=p, tags=tags, page_data=page_data)
 
 
@@ -120,8 +114,7 @@ def login():
         )
         db.session.add(userlog)
         db.session.commit()
-        session_clear()
-    
+
         return redirect(url_for('home.user'))
     return render_template("home/login.html", form=form)
 
@@ -149,7 +142,6 @@ def regist():
         )
         db.session.add(user)
         db.session.commit()
-        session_clear()
     
         flash('注册成功！', 'ok')
         return redirect(url_for('home.login'))
@@ -171,6 +163,7 @@ def comments(page=None):
     ).order_by(
         Comment.addtime.desc()
     ).paginate(page=page, per_page=10)
+    db.session.close()
     return render_template("home/comments.html",comments=comments)
 
 
@@ -186,7 +179,6 @@ def comments_del(id=None):
     db.session.commit()
     db.session.add(movie)
     db.session.commit()
-    session_clear()
 
     flash("删除评论成功！", "ok")
     return redirect(url_for('home.comments', page=1))
@@ -200,6 +192,7 @@ def loginlog(page=None):
     page_data = Userlog.query.filter_by(user_id=int(session['user_id'])).order_by(
         Userlog.addtime.desc()
     ).paginate(page=page, per_page=10)
+    db.session.close()
     return render_template("home/loginlog.html", page_data=page_data)
 
 
@@ -224,7 +217,6 @@ def moviecol_add():
         )
         db.session.add(moviecol)
         db.session.commit()
-        session_clear()
     
         data = dict(ok=1)
 
@@ -246,6 +238,7 @@ def moviecol(page=None):
     ).order_by(
         Moviecol.addtime.desc()
     ).paginate(page=page, per_page=10)
+    db.session.close()
     return render_template("home/moviecol.html", page_data=page_data)
 
 
@@ -264,7 +257,6 @@ def pwd():
         user.pwd = generate_password_hash(data['new_pwd'])
         db.session.add(user)
         db.session.commit()
-        session_clear()
     
         flash("修改密码成功", "ok")
         return redirect(url_for('home.pwd'))
@@ -309,7 +301,6 @@ def user():
         user.info = data['info']
         db.session.add(user)
         db.session.commit()
-        session_clear()
     
         flash('修改成功!', 'ok')
         return redirect(url_for('home.user'))
@@ -335,12 +326,12 @@ def search(page=None):
     ).order_by(
         Movie.addtime.desc()
     ).paginate(page=page, per_page=10)
+    db.session.close()
     page_data.key = key
     return render_template("home/search.html", page_data=page_data, key=key, movie_count=movie_count)
 
 
 # 播放页面
-
 @home.route('/play/<int:id>/<int:page>/', methods=["GET", "POST"])
 def play(id=None, page=None):
     from models import db
@@ -380,6 +371,5 @@ def play(id=None, page=None):
         return redirect(url_for("home.play", id=movie.id, page=1))
     db.session.add(movie)
     db.session.commit()
-    session_clear()
 
     return render_template("home/play.html", movie=movie, form=form,page_data=page_data)

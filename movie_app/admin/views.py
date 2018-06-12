@@ -113,6 +113,7 @@ def tag_list(page=None):
     page_data = Tag.query.order_by(
         Tag.addtime.desc()
     ).paginate(page=page,per_page=10)
+    db.session.close()
     return render_template("admin/tag_list.html",page_data=page_data)
 
 
@@ -198,6 +199,7 @@ def movie_list(page=None):
     page_data = Movie.query.order_by(
         Movie.addtime.desc()
     ).paginate(page=page, per_page=10)
+    db.session.close()
     return render_template("admin/movie_list.html", page_data=page_data)
 
 
@@ -294,6 +296,7 @@ def preview_list(page=None):
     page_data = Preview.query.order_by(
         Preview.addtime.desc()
     ).paginate(page=page, per_page=10)
+    db.session.close()
     return render_template("admin/preview_list.html", page_data=page_data)
 
 
@@ -336,6 +339,7 @@ def preview_del(id=None):
 @admin_login_req
 def user_view(id=None):
     user = User.query.get_or_404(int(id))
+    db.session.close()
     return render_template("admin/user_view.html", user=user)
 
 
@@ -363,6 +367,7 @@ def comment_list(page=None):
     ).order_by(
         Comment.addtime.desc()
     ).paginate(page=page, per_page=10, error_out=False)
+    db.session.close()
     return render_template("admin/comment_list.html", page_data=page_data)
 
 # 会员列表
@@ -374,6 +379,7 @@ def user_list(page=None):
     page_data = User.query.order_by(
         User.id.desc()
     ).paginate(page=page, per_page=10, error_out=False)
+    db.session.close()
     return render_template("admin/user_list.html", page_data=page_data)
 
 
@@ -406,8 +412,8 @@ def moviecol_list(page=None):
     ).order_by(
         Moviecol.id.desc()
     ).paginate(page=page, per_page=10, error_out=False)
+    db.session.close()
     return render_template("admin/moviecol_list.html", page_data=page_data)
-
 
 # 收藏删除
 @admin.route("/moviecol/del/<int:id>", methods=['GET'])
@@ -417,7 +423,6 @@ def moviecol_del(id=None):
     db.session.commit()
     flash("删除评论成功！", 'ok')
     return redirect(url_for('admin.moviecol_list', page=1))
-
 
 # 操作日志列表
 @admin.route("/oplog/list/<int:page>/", methods=["GET"])
@@ -429,6 +434,7 @@ def oplog_list(page=None):
         Admin.id == Oplog.admin_id).order_by(
         Oplog.addtime.desc()
     ).paginate(page=page, per_page=10)
+    db.session.close()
     return render_template("admin/oplog_list.html", page_data=page_data)
 
 # 管理员日志列表
@@ -441,8 +447,8 @@ def adminloginlog_list(page=None):
         Admin.id == Adminlog.admin_id).order_by(
         Adminlog.addtime.desc()
     ).paginate(page=page, per_page=10)
+    db.session.close()
     return render_template("admin/adminloginlog_list.html", page_data=page_data)
-
 
 # 会员日志列表
 @admin.route("/userloginlog/list/<int:page>/", methods=["GET"])
@@ -455,6 +461,7 @@ def userloginlog_list(page=None):
         User.id == Userlog.user_id).order_by(
         Userlog.addtime.desc()
     ).paginate(page=page, per_page=10)
+    db.session.close()
     return render_template("admin/userloginlog_list.html", page_data=page_data)
 
 
@@ -514,6 +521,7 @@ def role_list(page=None):
         page = 1
     page_data = Role.query.order_by(
         Role.addtime.desc()).paginate(page=page, per_page=10)
+    db.session.close()
     return render_template("admin/role_list.html", page_data=page_data)
 
 #权限添加
@@ -584,6 +592,7 @@ def auth_list(page=None):
     page_data = Auth.query.order_by(
         Auth.addtime.desc()
     ).paginate(page=page, per_page=10)
+    db.session.close()
     return render_template("admin/auth_list.html", page_data=page_data)
 
 
